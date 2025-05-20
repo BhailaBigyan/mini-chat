@@ -1,0 +1,20 @@
+{
+  "scripts": {
+  "start": "node server.js"
+  },
+  "name": "mini-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "mini-chat": "./server.js"
+  },
+  "keywords": [],
+  "author": "Bigyan Bhaila",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.1.0",
+    "socket.io": "^4.8.1"
+  }
+}

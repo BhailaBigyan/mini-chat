@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mini Chat</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        #messages {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 10px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin: 10px 0;
+            max-width: 70%;
+            padding: 8px 12px;
+            border-radius: 10px;
+            position: relative;
+            clear: both;
+        }
+
+        .my-message {
+            background: #dcf8c6;
+            float: right;
+            text-align: right;
+        }
+
+        .other-message {
+            background: #eee;
+            float: left;
+        }
+
+        .username-label {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 2px;
+        }
+
+        #form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #input {
+            flex-grow: 1;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #button {
+            padding: 8px 16px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #namePrompt {
+            display: flex;
+            justify-content: center;
+            margin: 50px;
+            gap: 10px;
+        }
+
+        #nameDisplay {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h2>💬 Mini Chat</h2>
+        <div id="nameDisplay"></div>
+    </header>
+
+    <div class="chat-container">
+        <div id="namePrompt">
+            <input id="username" placeholder="Enter your name..." />
+            <input type="button" name="join" id="button" onclick="startChat()" value="Join Chat" />
+        </div>
+
+        <ul id="messages" style="display:none;"></ul>
+
+        <form id="form" style="display:none;">
+            <input id="input" autocomplete="off" placeholder="Type message..." />
+            <input type="button" id="button" value="Send" onclick="document.getElementById('form').dispatchEvent(new Event('submit'))" />
+        </form>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let username = "";
+        const socket = io();
+        const form = document.getElementById('form');
+        const input = document.getElementById('input');
+        const messages = document.getElementById('messages');
+
+        function startChat() {
+            const nameInput = document.getElementById('username');
+            username = nameInput.value.trim();
+
+            if (username) {
+                document.getElementById('namePrompt').style.display = 'none';
+                form.style.display = 'flex';
+                messages.style.display = 'block';
+                document.getElementById('nameDisplay').innerText = `You: ${username}`;
+            }
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value && username) {
+                socket.emit('chat message', {
+                    name: username,
+                    message: input.value
+                });
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', function(data) {
+            const item = document.createElement('li');
+            const isMine = data.name === username;
+
+            item.classList.add('message');
+            item.classList.add(isMine ? 'my-message' : 'other-message');
+
+            item.innerHTML = `<div class="username-label">${data.name}</div>${data.message}`;
+            messages.appendChild(item);
+            messages.scrollTop = messages.scrollHeight;
+        });
+    </script>
+
+</body>
+</html>
