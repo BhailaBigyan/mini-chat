@@ -21,6 +21,35 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    header > div {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      justify-content: space-between;
+    }
+    #userInfo {
+      margin-top: 5px;
+      color: #ccc;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+      justify-content: flex-start;
+    }
+    #leaveBtn {
+      display: none; /* Hidden initially */
+      background: #aa2222;
+      border: none;
+      border-radius: 5px;
+      color: white;
+      cursor: pointer;
+      padding: 5px 12px;
+      font-size: 0.85rem;
     }
     .chat-container {
       max-width: 800px;
@@ -96,11 +125,6 @@
       flex-grow: 1;
       max-width: 250px;
     }
-    #nameDisplay {
-      font-size: 0.9rem;
-      color: #ccc;
-      margin-left: auto;
-    }
     @media screen and (max-width: 600px) {
       header h2 {
         font-size: 1.2rem;
@@ -117,15 +141,15 @@
 <body>
   <header>
     <div>
-        <h2>Mini Chat</h2>
-        <p>Powered By- Bigyan Bhaila</p>
+      <h2>Mini Chat</h2>
+      <p style="margin: 0 0 0 10px; font-size: 0.85rem; color: #ccc;">Powered By - Bigyan Bhaila</p>
     </div>
-    <h1>
-            <span id="nameDisplay"></span>
-            <span id="userCount" style="margin-left: auto; font-size: 0.85rem; color: #ccc;"></span>          
-    </h1>
-    
-   
+
+    <div id="userInfo">
+      <span id="nameDisplay"></span>
+      <span id="userCount"></span>
+      <button id="leaveBtn" title="Leave Chat">← Leave</button>
+    </div>
   </header>
 
   <div id="namePrompt">
@@ -146,22 +170,47 @@
     const socket = io();
     let myName = '';
 
+    // Request permission for notifications
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
     function startChat() {
-        const nameInput = document.getElementById('username');
-        const chatBox = document.getElementById('chatBox');
-        myName = nameInput.value.trim();
+      const nameInput = document.getElementById('username');
+      const chatBox = document.getElementById('chatBox');
+      myName = nameInput.value.trim();
 
-        if (myName === '') return;
+      if (myName === '') return;
 
-        // ✅ Emit to server
+      localStorage.setItem('chatUsername', myName);
+
+      socket.emit('new user', myName);
+
+      document.getElementById('nameDisplay').textContent = myName;
+      document.getElementById('namePrompt').style.display = 'none';
+      chatBox.style.display = 'block';
+      document.getElementById('leaveBtn').style.display = 'inline-block'; // Show leave button
+    }
+
+    // Auto-login if name saved in localStorage
+    window.addEventListener('load', () => {
+      const savedName = localStorage.getItem('chatUsername');
+      if (savedName) {
+        myName = savedName;
         socket.emit('new user', myName);
 
-        // Update UI
         document.getElementById('nameDisplay').textContent = myName;
         document.getElementById('namePrompt').style.display = 'none';
-        chatBox.style.display = 'block';
-        }
+        document.getElementById('chatBox').style.display = 'block';
+        document.getElementById('leaveBtn').style.display = 'inline-block'; // Show leave button
+      }
+    });
 
+    // Leave button clears username and reloads page
+    document.getElementById('leaveBtn').addEventListener('click', () => {
+      localStorage.removeItem('chatUsername');
+      location.reload();
+    });
 
     const form = document.getElementById('form');
     const input = document.getElementById('input');
@@ -187,15 +236,21 @@
       messages.scrollTop = messages.scrollHeight;
     }
 
+    // Show notification for messages from others
     socket.on('chat message', ({ username, message }) => {
       addMessage(username, message);
+      if (username !== myName && Notification.permission === "granted") {
+        new Notification(`New message from ${username}`, {
+          body: message,
+          icon: '/favicon.ico' // optional: add your icon path here
+        });
+      }
     });
 
     socket.on('chat history', (msgs) => {
       msgs.forEach(({ username, message }) => addMessage(username, message));
     });
 
-    
     socket.on('system message', (msg) => {
       const item = document.createElement('li');
       item.textContent = msg;
@@ -205,10 +260,10 @@
       messages.appendChild(item);
       messages.scrollTop = messages.scrollHeight;
     });
-    socket.on('active users', (count) => {
-  document.getElementById('userCount').textContent = `👥 ${count} active`;
-});
 
+    socket.on('active users', (count) => {
+      document.getElementById('userCount').textContent = `👥 ${count} active`;
+    });
   </script>
 </body>
 </html>
