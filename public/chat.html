@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="transition-colors duration-300">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chat Lobby</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind dark mode setup
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 sm:p-6 transition-colors duration-300 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 bg-white dark:bg-gray-800 p-4 rounded shadow">
+    <div class="flex items-center space-x-3 w-full sm:w-auto">
+      <div id="avatar" class="bg-blue-600 text-white font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm shrink-0"></div>
+      <div class="truncate">
+        <h2 class="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1 truncate">Welcome to the Chat Lobby</h2>
+        <p id="nameDisplay" class="text-sm truncate"></p>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mt-4 sm:mt-0 w-full sm:w-auto">
+      <button onclick="toggleDarkMode()" class="px-3 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 text-sm w-full sm:w-auto">Toggle Dark Mode</button>
+      <button onclick="logout()" class="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm w-full sm:w-auto">Logout</button>
+    </div>
+  </header>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 mb-6">
+    <a href="/chat-room" class="btn px-4 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-center w-full sm:w-auto">Public Chat</a>
+    <a href="/create-room" class="btn px-4 py-3 bg-green-600 text-white rounded hover:bg-green-700 transition text-center w-full sm:w-auto">Create Private Room</a>
+    <a href="/join" class="btn px-4 py-3 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition text-center w-full sm:w-auto">Join Private Room</a>
+  </div>
+
+  <!-- Private Rooms List -->
+  <div id="my-private-rooms" class="bg-white dark:bg-gray-800 p-4 rounded shadow flex-grow overflow-auto max-h-[50vh]">
+    <h3 class="text-xl font-semibold mb-4">My Private Rooms</h3>
+    <ul id="room-list" class="space-y-2 overflow-auto max-h-[40vh]">
+      <!-- Rooms inserted here -->
+    </ul>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Load and show private rooms
+    fetch('/api/my-private-rooms')
+      .then(res => res.json())
+      .then(rooms => {
+        const ul = document.getElementById('room-list');
+        rooms.forEach(room => {
+          const li = document.createElement('li');
+          li.className = "bg-gray-100 dark:bg-gray-700 p-3 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition";
+          li.innerHTML = `<a href="/private/${room.code}" class="text-blue-600 dark:text-blue-400 hover:underline block truncate">${room.nickname || room.code}</a>`;
+          ul.appendChild(li);
+        });
+      });
+
+    // Fetch user name and show initials
+    fetch('/get-username')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.username) {
+          window.location.href = '/';
+        } else {
+          document.getElementById('nameDisplay').textContent = `Logged in as: ${data.name}`;
+          console.log(`User ${data.username} (${data.name}) connected`);
+        }
+      });
+
+    function logout() {
+      localStorage.removeItem('username');
+      window.location.href = '/';
+    }
+
+    // Dark mode toggle
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    }
+
+    // Load dark mode preference
+    (function () {
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+</body>
+</html>

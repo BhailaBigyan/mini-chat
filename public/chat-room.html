@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Global Chat</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --success: #10b981;
+      --success-dark: #059669;
+      --bg: #f1f3f5;
+      --light: #f9fafb;
+      --gray: #e5e7eb;
+      --text-dark: #111827;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      padding: 10px;
+    }
+
+    #chatContainer {
+      max-width: 800px;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+      overflow: hidden;
+    }
+
+    header {
+      padding: 16px;
+      background-color: var(--primary);
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header a {
+      background-color: var(--success);
+      color: white;
+      padding: 6px 14px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: background-color 0.2s ease;
+    }
+
+    header a:hover {
+      background-color: var(--success-dark);
+    }
+
+    ul {
+      list-style: none;
+      padding: 20px;
+      margin: 0;
+      flex-grow: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: var(--light);
+    }
+
+    .my-message {
+      align-self: flex-end;
+      background-color: var(--primary);
+      color: white;
+      padding: 10px 15px;
+      border-radius: 16px 16px 0 16px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    .other-message {
+      align-self: flex-start;
+      background-color: var(--gray);
+      color: var(--text-dark);
+      padding: 10px 15px;
+      border-radius: 16px 16px 16px 0;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    .system-message {
+      align-self: center;
+      color: gray;
+      font-style: italic;
+      font-size: 14px;
+    }
+
+    form {
+      display: flex;
+      border-top: 1px solid #ddd;
+      padding: 14px;
+      background: #fff;
+    }
+
+    input {
+      flex-grow: 1;
+      padding: 12px 16px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-left: 10px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+
+      form {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+      }
+
+      input, button {
+        width: 100%;
+        margin-left: 0;
+      }
+
+      .my-message, .other-message {
+        max-width: 95%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="chatContainer">
+    <header>
+      <div>Global Chat</div>
+      <a href="/chat">Back to Lobby</a>
+    </header>
+    <ul id="messages"></ul>
+    <form id="chatForm">
+      <input id="messageInput" placeholder="Type a message..." autocomplete="off" />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    let username = "";
+
+    fetch('/get-username')
+      .then(res => res.json())
+      .then(data => {
+        if (!data.username) {
+          window.location.href = "/";
+        } else {
+          username = data.username;
+          initSocket();
+        }
+      });
+
+    function initSocket() {
+      const socket = io();
+      const form = document.getElementById('chatForm');
+      const input = document.getElementById('messageInput');
+      const messages = document.getElementById('messages');
+
+      socket.emit('new user', { username });
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        const message = input.value.trim();
+        if (message) {
+          socket.emit('chat message', message);
+          input.value = '';
+        }
+      });
+
+      socket.on('chat message', ({ username: sender, message }) => {
+        const li = document.createElement('li');
+        li.className = sender === username ? 'my-message' : 'other-message';
+        li.textContent = `${sender}: ${message}`;
+        messages.appendChild(li);
+        messages.scrollTop = messages.scrollHeight;
+      });
+
+      socket.on('chat history', msgs => {
+        msgs.forEach(({ username: sender, message }) => {
+          const li = document.createElement('li');
+          li.className = sender === username ? 'my-message' : 'other-message';
+          li.textContent = `${sender}: ${message}`;
+          messages.appendChild(li);
+        });
+        messages.scrollTop = messages.scrollHeight;
+      });
+
+      socket.on('system message', msg => {
+        const li = document.createElement('li');
+        li.className = 'system-message';
+        li.textContent = `* ${msg}`;
+        messages.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>

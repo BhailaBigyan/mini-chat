@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Private Chat</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f3f4f6;
+    }
+
+    #container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      height: 85vh;
+      width: 90%;
+    }
+
+    header {
+      padding: 16px;
+      background-color: #4f46e5;
+      color: white;
+      font-size: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    button {
+      background-color: #2563eb;
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #1e40af;
+    }
+
+    #roomNickname {
+      margin: 16px;
+      font-size: 16px;
+      font-weight: bold;
+      word-break: break-word;
+    }
+
+    #roomCodeContainer {
+      margin: 0 16px 16px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+    }
+
+    #roomCode {
+      background: #f3f4f6;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-family: monospace;
+    }
+
+    #chatBox {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid #eee;
+    }
+
+    #messages {
+      list-style: none;
+      padding: 16px;
+      margin: 0;
+      flex-grow: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background-color: #fafafa;
+    }
+
+    .my-message {
+      align-self: flex-end;
+      background-color: #2563eb;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 16px 16px 0 16px;
+      max-width: 75%;
+      word-wrap: break-word;
+    }
+
+    .other-message {
+      align-self: flex-start;
+      background-color: #e5e7eb;
+      color: #111827;
+      padding: 10px 15px;
+      border-radius: 16px 16px 16px 0;
+      max-width: 75%;
+      word-wrap: break-word;
+    }
+
+    .system-message {
+      align-self: center;
+      color: gray;
+      font-style: italic;
+      font-size: 14px;
+    }
+
+    #chatForm {
+      display: flex;
+      padding: 12px;
+      gap: 10px;
+      border-top: 1px solid #ddd;
+      flex-wrap: wrap;
+    }
+
+    #messageInput {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      min-width: 0;
+    }
+
+    #chatForm button {
+      background-color: #4f46e5;
+      color: white;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #chatForm button:hover {
+      background-color: #4338ca;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .controls {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      #roomNickname {
+        font-size: 14px;
+        margin: 12px 16px;
+      }
+
+      #roomCodeContainer {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .my-message,
+      .other-message {
+        max-width: 90%;
+        font-size: 14px;
+      }
+
+      #messageInput {
+        font-size: 14px;
+      }
+
+      #chatForm button {
+        font-size: 14px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Your existing body content (unchanged) -->
+
+  <div id="container">
+    <header>
+      <span>Private Chat Room</span>
+      <div class="controls">
+        <button onclick="window.location.href='/chat.html'">Back to Lobby</button>
+        <button id="editRoomNameBtn">Edit Room Name</button>
+        <button id="deleteChatBtn" style="background-color: crimson; color: white; border: none; padding: 8px 12px; margin-left: 10px; cursor: pointer;">
+  Delete Chat
+</button>
+
+      </div>
+    </header>
+    <h2 id="roomNickname">Room: ...</h2>
+
+    <div id="roomCodeContainer">
+      <span>Code:</span>
+      <span id="roomCode"></span>
+      <button onclick="copyCode()">Copy</button>
+    </div>
+
+    <div id="chatBox">
+      <ul id="messages"></ul>
+      <form id="chatForm">
+        <input id="messageInput" autocomplete="off" placeholder="Type a message..." />
+        <button>Send</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+document.getElementById('deleteChatBtn').addEventListener('click', () => {
+  if (confirm("Are you sure you want to delete the chat history for this room? This cannot be undone.")) {
+    fetch(`/api/private-room/${room}/delete-chat`, {
+      method: 'DELETE'
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        document.getElementById('messages').innerHTML = '';
+        alert("Chat history deleted successfully.");
+      } else {
+        alert(data.error || "Failed to delete chat history.");
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Error deleting chat history.");
+    });
+  }
+});
+</script>
+
+  <script>
+    const socket = io();
+    const room = window.location.pathname.split('/').pop();
+    document.getElementById('roomCode').textContent = room;
+
+    function copyCode() {
+      navigator.clipboard.writeText(room).then(() => {
+        alert("Room code copied!");
+      });
+    }
+
+    fetch(`/api/private-room/${room}/info`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('roomNickname').textContent = `Room: ${data.nickname}`;
+      });
+
+    document.getElementById('editRoomNameBtn').addEventListener('click', () => {
+      const newName = prompt('Enter new room name:');
+      if (newName && newName.trim()) {
+        fetch(`/api/private-room/${room}/edit-name`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nickname: newName })
+        }).then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              document.getElementById('roomNickname').textContent = `Room: ${newName}`;
+            } else {
+              alert(data.error || 'Error updating room name');
+            }
+          });
+      }
+    });
+
+    fetch('/get-username')
+      .then(res => res.json())
+      .then(user => {
+        if (!user.username) {
+          alert('You must be logged in to access this chat.');
+          window.location.href = '/login';
+          return;
+        }
+
+        const username = user.username;
+        socket.emit('join private', { room, username });
+
+        const form = document.getElementById('chatForm');
+        const input = document.getElementById('messageInput');
+        const messages = document.getElementById('messages');
+
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const message = input.value.trim();
+          if (message) {
+            socket.emit('chat message', message);
+            input.value = '';
+          }
+        });
+
+        socket.on('chat message', ({ username: sender, message }) => {
+          const li = document.createElement('li');
+          li.className = sender === username ? 'my-message' : 'other-message';
+          li.textContent = `${sender}: ${message}`;
+          messages.appendChild(li);
+          messages.scrollTop = messages.scrollHeight;
+        });
+
+        socket.on('system message', msg => {
+          const li = document.createElement('li');
+          li.className = 'system-message';
+          li.textContent = `* ${msg}`;
+          messages.appendChild(li);
+          messages.scrollTop = messages.scrollHeight;
+        });
+
+        socket.on('chat history', msgs => {
+          msgs.forEach(({ username: sender, message }) => {
+            const li = document.createElement('li');
+            li.className = sender === username ? 'my-message' : 'other-message';
+            li.textContent = `${sender}: ${message}`;
+            messages.appendChild(li);
+          });
+          messages.scrollTop = messages.scrollHeight;
+        });
+
+      }).catch(err => {
+        console.error('Error fetching user data:', err);
+        alert('Session error. Please log in again.');
+        window.location.href = '/login';
+      });
+  </script>
+</body>
+</html>

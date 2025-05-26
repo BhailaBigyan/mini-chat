@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Join Private Room</title>
+  <style>
+    :root {
+      --primary: #3f51b5;
+      --primary-dark: #2c3ca8;
+      --secondary: #9e9e9e;
+      --secondary-dark: #7b7b7b;
+      --bg: #f5f5f5;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 15px;
+    }
+
+    #joinForm {
+      background: white;
+      padding: 25px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: background 0.3s ease;
+    }
+
+    #joinBtn {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    #joinBtn:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .btn {
+      background-color: var(--secondary);
+      color: white;
+    }
+
+    .btn:hover {
+      background-color: var(--secondary-dark);
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      #joinForm {
+        padding: 20px 15px;
+      }
+
+      input, button {
+        font-size: 15px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="joinForm">
+    <h2>Join a Private Room</h2>
+    <input id="roomCode" placeholder="Enter room code" autocomplete="off" />
+    <button id="joinBtn">Join Room</button>
+    <button onclick="window.location.href='/chat.html'" class="btn">Back to Lobby</button>
+  </div>
+
+  <script>
+    document.getElementById('joinBtn').addEventListener('click', () => {
+      const code = document.getElementById('roomCode').value.trim();
+      if (!code) {
+        alert('Please enter a room code');
+        return;
+      }
+      window.location.href = `/private/${encodeURIComponent(code)}`;
+    });
+  </script>
+</body>
+</html>
