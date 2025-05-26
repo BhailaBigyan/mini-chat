@@ -246,8 +246,7 @@ app.get('/api/private-room/:code/info', isAuth, async (req, res) => {
 app.use((req, res) => {
   res.status(404).sendFile(__dirname + '/public/404.html');
 });
-
 const PORT = process.env.PORT || 3000;
-http.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
