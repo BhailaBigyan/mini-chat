@@ -1,95 +1,654 @@
 <!DOCTYPE html>
 <html lang="en" class="transition-colors duration-300">
-<head>
+<h>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chat Lobby</title>
+  <title>Chat Lobby - Mini Chat</title>
+  <link rel="stylesheet" href="../styles/style.css" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .glass-effect {
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .dark .glass-effect {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .dark .gradient-bg {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    }
+    
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dark .card-hover:hover {
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
+    }
+    
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+      50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.8); }
+    }
+    
+    .floating-element {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .slide-in {
+      animation: slideIn 0.5s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .loading-skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+    
+    .dark .loading-skeleton {
+      background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+      background-size: 200% 100%;
+    }
+    
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    
+    .notification {
+      animation: slideInRight 0.3s ease-out;
+    }
+    
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+/* for the join button */
+     .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: rgba(30, 30, 46, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .modal h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 16px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .modal input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .modal input::placeholder {
+      color: #a0a0a0;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-btn.primary {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+    }
+
+    .modal-btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .modal-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    
+  </style> -->
+  <style>
+    /* for the join button */
+     .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: rgba(30, 30, 46, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .modal h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .modal input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      font-size: 16px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .modal input:focus {
+      outline: none;
+      border-color: #3b82f6;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .modal input::placeholder {
+      color: #a0a0a0;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 15px;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-btn.primary {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      color: white;
+    }
+
+    .modal-btn.secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .modal-btn:hover {
+      transform: translateY(-2px);
+    }
+
+  </style>
   <script>
-    // Tailwind dark mode setup
     tailwind.config = {
       darkMode: 'class',
     }
   </script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 sm:p-6 transition-colors duration-300 min-h-screen flex flex-col">
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-gray-200 transition-colors duration-300 min-h-screen">
 
-  <!-- Header -->
-  <header class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 bg-white dark:bg-gray-800 p-4 rounded shadow">
-    <div class="flex items-center space-x-3 w-full sm:w-auto">
-      <div id="avatar" class="bg-blue-600 text-white font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm shrink-0"></div>
-      <div class="truncate">
-        <h2 class="text-xl sm:text-2xl font-bold text-blue-600 dark:text-blue-400 mb-1 truncate">Welcome to the Chat Lobby</h2>
-        <p id="nameDisplay" class="text-sm truncate"></p>
+  <!-- Animated Background Elements -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <div class="absolute top-20 left-10 w-72 h-72 bg-purple-300 dark:bg-purple-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating-element"></div>
+    <div class="absolute top-40 right-10 w-72 h-72 bg-yellow-300 dark:bg-yellow-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating-element" style="animation-delay: -2s;"></div>
+    <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 dark:bg-pink-600 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating-element" style="animation-delay: -4s;"></div>
+  </div>
+
+  <!-- Notification Container -->
+  <div id="notifications" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+  <div class="relative z-10 p-4 sm:p-6 min-h-screen flex flex-col max-w-7xl mx-auto">
+    
+    <!-- Header -->
+    <header class="glass-effect backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 p-6 rounded-3xl shadow-xl mb-8 slide-in">
+      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+        <div class="flex items-center space-x-4 w-full lg:w-auto">
+          <div id="avatar" class="bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold rounded-2xl w-16 h-16 flex items-center justify-center text-xl shadow-lg pulse-glow shrink-0"></div>
+          <div class="min-w-0 flex-1">
+            <h1 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent mb-1">
+              Chat Lobby
+            </h1>
+            <p id="nameDisplay" class="text-sm sm:text-base text-gray-600 dark:text-gray-400 truncate">
+              <span class="loading-skeleton inline-block w-32 h-4 rounded"></span>
+            </p>
+            <div class="flex items-center mt-2">
+              <div class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+              <span class="text-xs text-green-600 dark:text-green-400 font-medium">Online</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="flex items-center space-x-3 w-full lg:w-auto">
+          <button onclick="toggleDarkMode()" class="flex items-center justify-center p-3 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-all duration-200 shadow-md hover:shadow-lg group">
+            <svg id="theme-icon" class="w-5 h-5 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+            </svg>
+          </button>
+          <button onclick="logout()" class="flex items-center justify-center px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-xl transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 group">
+            <svg class="w-5 h-5 mr-2 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+            <span class="hidden sm:inline">Logout</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 fade-in">
+      <!-- <div class="glass-effect backdrop-blur-xl bg-white/60 dark:bg-gray-800/60 p-4 rounded-2xl text-center">
+        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400" id="active-users">
+          <span class="loading-skeleton inline-block w-8 h-6 rounded"></span>
+        </div>
+        <div class="text-sm text-gray-600 dark:text-gray-400">Active Users</div>
+      </div>
+      <div class="glass-effect backdrop-blur-xl bg-white/60 dark:bg-gray-800/60 p-4 rounded-2xl text-center">
+        <div class="text-2xl font-bold text-green-600 dark:text-green-400" id="public-messages">
+          <span class="loading-skeleton inline-block w-8 h-6 rounded"></span>
+        </div>
+        <div class="text-sm text-gray-600 dark:text-gray-400">Public Messages</div>
+      </div> -->
+      <div class="glass-effect backdrop-blur-xl bg-white/60 dark:bg-gray-800/60 p-4 rounded-2xl text-center">
+        <div class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="private-rooms">
+          <span class="loading-skeleton inline-block w-8 h-6 rounded"></span>
+        </div>
+        <div class="text-sm text-gray-600 dark:text-gray-400">Private Rooms</div>
+      </div>
+      <!-- <div class="glass-effect backdrop-blur-xl bg-white/60 dark:bg-gray-800/60 p-4 rounded-2xl text-center">
+        <div class="text-2xl font-bold text-orange-600 dark:text-orange-400" id="online-time">00:00</div>
+        <div class="text-sm text-gray-600 dark:text-gray-400">Online Time</div>
+      </div> -->
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 fade-in">
+      <a href="/chat-room" class="group glass-effect backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 p-6 rounded-3xl shadow-xl card-hover text-center">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a2 2 0 01-2-2v-6a2 2 0 012-2h8z"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">Public Chat</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">Join the global conversation with everyone online</p>
+      </a>
+      
+      <a href="/create-room" class="group glass-effect backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 p-6 rounded-3xl shadow-xl card-hover text-center">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">Create Room</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">Start a new private room for you and your friends</p>
+      </a>
+      
+      <a onclick="showJoinModal()" class="group glass-effect backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 p-6 rounded-3xl shadow-xl card-hover text-center">
+        <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
+          <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+          </svg>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-2">Join Room</h3>
+        <p class="text-gray-600 dark:text-gray-400 text-sm">Enter a room code to join a private conversation</p>
+      </a>
+    </div>
+
+    <!-- Private Rooms Section -->
+    <div class="glass-effect backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 p-6 rounded-3xl shadow-xl flex-grow fade-in">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200 flex items-center">
+          <svg class="w-6 h-6 mr-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+          </svg>
+          My Private Rooms
+        </h2>
+        <button onclick="refreshRooms()" class="p-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-xl transition-all duration-200">
+          <svg id="refresh-icon" class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+          </svg>
+        </button>
+      </div>
+      
+      <div id="room-list-container" class="max-h-96 overflow-y-auto">
+        <ul id="room-list" class="space-y-3">
+          <!-- Loading skeleton -->
+          <li class="loading-skeleton h-16 rounded-2xl"></li>
+          <li class="loading-skeleton h-16 rounded-2xl"></li>
+          <li class="loading-skeleton h-16 rounded-2xl"></li>
+        </ul>
+      </div>
+      
+      <div id="empty-rooms" class="hidden text-center py-12">
+        <div class="text-6xl mb-4">🏠</div>
+        <h3 class="text-xl font-semibold text-gray-600 dark:text-gray-400 mb-2">No Private Rooms Yet</h3>
+        <p class="text-gray-500 dark:text-gray-500 mb-6">Create your first private room to get started!</p>
+        <a href="/create-room" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+          </svg>
+          Create Room
+        </a>
       </div>
     </div>
-    <div class="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-3 mt-4 sm:mt-0 w-full sm:w-auto">
-      <button onclick="toggleDarkMode()" class="px-3 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 text-sm w-full sm:w-auto">Toggle Dark Mode</button>
-      <button onclick="logout()" class="px-3 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm w-full sm:w-auto">Logout</button>
+  </div>
+   <!-- Join Room Modal -->
+  <div class="modal" id="joinModal">
+    <div class="modal-content">
+      <h2>Join a Private Room</h2>
+      <input id="roomCode" placeholder="Enter room code" autocomplete="off" />
+      <div class="modal-actions">
+        <button class="modal-btn primary" onclick="joinWithCode()" id="joinBtn">Join Room</button>
+        <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+      </div>
     </div>
-  </header>
-
-  <!-- Action Buttons -->
-  <div class="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 mb-6">
-    <a href="/chat-room" class="btn px-4 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-center w-full sm:w-auto">Public Chat</a>
-    <a href="/create-room" class="btn px-4 py-3 bg-green-600 text-white rounded hover:bg-green-700 transition text-center w-full sm:w-auto">Create Private Room</a>
-    <a href="/join" class="btn px-4 py-3 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition text-center w-full sm:w-auto">Join Private Room</a>
   </div>
+  <script>
+    document.getElementById('joinBtn').addEventListener('click', () => {
+      const code = document.getElementById('roomCode').value.trim();
+      if (!code) {
+        alert('Please enter a room code');
+        return;
+      }
+      window.location.href = `/private/${encodeURIComponent(code)}`;
+    });
+      function closeModal() {
+      document.getElementById('joinModal').style.display = 'none';
+      document.getElementById('roomCode').value = '';
+    }
+    function showJoinModal() {
+      document.getElementById('joinModal').style.display = 'flex';
+      document.getElementById('roomCode').focus();
+    }
 
-  <!-- Private Rooms List -->
-  <div id="my-private-rooms" class="bg-white dark:bg-gray-800 p-4 rounded shadow flex-grow overflow-auto max-h-[50vh]">
-    <h3 class="text-xl font-semibold mb-4">My Private Rooms</h3>
-    <ul id="room-list" class="space-y-2 overflow-auto max-h-[40vh]">
-      <!-- Rooms inserted here -->
-    </ul>
-  </div>
+  </script>
 
   <!-- Scripts -->
   <script>
+    let onlineStartTime = Date.now();
+    let userData = null;
+    
+    // Show notification
+    function showNotification(message, type = 'info') {
+      const notification = document.createElement('div');
+      notification.className = `notification p-4 rounded-xl shadow-lg text-white ${
+        type === 'success' ? 'bg-green-500' : 
+        type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+      }`;
+      notification.textContent = message;
+      
+      document.getElementById('notifications').appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideInRight 0.3s ease-out reverse';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+    
+    // Update online time
+    function updateOnlineTime() {
+      const elapsed = Date.now() - onlineStartTime;
+      const minutes = Math.floor(elapsed / 60000);
+      const seconds = Math.floor((elapsed % 60000) / 1000);
+      // document.getElementById('online-time').textContent = 
+      //   `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    
     // Load and show private rooms
-    fetch('/api/my-private-rooms')
-      .then(res => res.json())
-      .then(rooms => {
+    async function loadPrivateRooms() {
+      try {
+        const response = await fetch('/api/my-private-rooms');
+        const rooms = await response.json();
         const ul = document.getElementById('room-list');
-        rooms.forEach(room => {
+        const emptyState = document.getElementById('empty-rooms');
+        
+        ul.innerHTML = '';
+        
+        if (rooms.length === 0) {
+          emptyState.classList.remove('hidden');
+          document.getElementById('private-rooms').textContent = '0';
+          return;
+        }
+        
+        emptyState.classList.add('hidden');
+        document.getElementById('private-rooms').textContent = rooms.length;
+        
+        rooms.forEach((room, index) => {
           const li = document.createElement('li');
-          li.className = "bg-gray-100 dark:bg-gray-700 p-3 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition";
-          li.innerHTML = `<a href="/private/${room.code}" class="text-blue-600 dark:text-blue-400 hover:underline block truncate">${room.nickname || room.code}</a>`;
+          li.className = "glass-effect backdrop-blur-xl bg-white/60 dark:bg-gray-700/60 p-4 rounded-2xl hover:bg-white/80 dark:hover:bg-gray-700/80 transition-all duration-200 card-hover";
+          li.style.animationDelay = `${index * 0.1}s`;
+          li.classList.add('fade-in');
+          
+          const lastActivity = room.lastActivity ? new Date(room.lastActivity).toLocaleString() : 'Never';
+          const memberCount = room.members || 1;
+          
+          li.innerHTML = `
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-4 flex-1 min-w-0">
+                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-white font-bold text-lg shrink-0">
+                  ${(room.nickname || room.code).charAt(0).toUpperCase()}
+                </div>
+                <div class="min-w-0 flex-1">
+                  <h4 class="font-semibold text-gray-800 dark:text-gray-200 truncate">${room.nickname || room.code}</h4>
+                  <p class="text-sm text-gray-600 dark:text-gray-400">
+                    ${memberCount} member${memberCount !== 1 ? 's' : ''} • Last active: ${lastActivity}
+                  </p>
+                </div>
+              </div>
+              <a href="/private/${room.code}" class="ml-4 px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105 text-sm font-medium">
+                Join
+              </a>
+            </div>
+          `;
           ul.appendChild(li);
         });
-      });
-
-    // Fetch user name and show initials
-    fetch('/get-username')
-      .then(res => res.json())
-      .then(data => {
+      } catch (error) {
+        console.error('Error loading rooms:', error);
+        showNotification('Failed to load private rooms', 'error');
+      }
+    }
+    
+    // Refresh rooms
+    async function refreshRooms() {
+      const refreshIcon = document.getElementById('refresh-icon');
+      refreshIcon.style.transform = 'rotate(360deg)';
+      await loadPrivateRooms();
+      setTimeout(() => {
+        refreshIcon.style.transform = 'rotate(0deg)';
+      }, 500);
+    }
+    
+    // Fetch user data and initialize
+    async function initializeUser() {
+      try {
+        const response = await fetch('/get-username');
+        const data = await response.json();
+        
         if (!data.username) {
           window.location.href = '/';
-        } else {
-          document.getElementById('nameDisplay').textContent = `Logged in as: ${data.name}`;
-          console.log(`User ${data.username} (${data.name}) connected`);
+          return;
         }
-      });
-
+        
+        userData = data;
+        document.getElementById('nameDisplay').textContent = `Welcome back, ${data.name}!`;
+        
+        // Set avatar initials
+        const initials = data.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+        document.getElementById('avatar').textContent = initials;
+        
+        // Load stats (mock data for demo)
+        setTimeout(() => {
+          document.getElementById('active-users').textContent = Math.floor(Math.random() * 500) + 100;
+          document.getElementById('public-messages').textContent = Math.floor(Math.random() * 1000) + 500;
+        }, 500);
+        
+        console.log(`User ${data.username} (${data.name}) connected`);
+        showNotification(`Welcome back, ${data.name}!`, 'success');
+        
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        showNotification('Failed to load user data', 'error');
+      }
+    }
+    
+    // Logout function
     function logout() {
       localStorage.removeItem('username');
-      window.location.href = '/';
+      localStorage.removeItem('theme');
+      showNotification('Logging out...', 'info');
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
     }
-
+    
     // Dark mode toggle
     function toggleDarkMode() {
       const html = document.documentElement;
-      html.classList.toggle('dark');
-      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+      const isDark = html.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      
+      // Update theme icon
+      const themeIcon = document.getElementById('theme-icon');
+      if (isDark) {
+        themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+      } else {
+        themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+      }
+      
+      showNotification(`Switched to ${isDark ? 'dark' : 'light'} mode`, 'success');
     }
-
-    // Load dark mode preference
-    (function () {
+    
+    // Load theme preference
+    (function() {
       const theme = localStorage.getItem('theme');
-      if (theme === 'dark') {
+      const isDark = theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (isDark) {
         document.documentElement.classList.add('dark');
       }
+      
+      // Set initial theme icon
+      const themeIcon = document.getElementById('theme-icon');
+      if (isDark) {
+        themeIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+      }
     })();
+    
+    // Initialize everything
+    document.addEventListener('DOMContentLoaded', async () => {
+      await initializeUser();
+      await loadPrivateRooms();
+      
+      // Start online time counter
+      setInterval(updateOnlineTime, 1000);
+      
+      // Auto-refresh rooms every 30 seconds
+      setInterval(loadPrivateRooms, 30000);
+    });
   </script>
 </body>
 </html>

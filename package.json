@@ -14,17 +14,21 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.7",
+    "@capacitor/android": "^7.2.0",
+    "@capacitor/ios": "^7.2.0",
+    "@tailwindcss/vite": "^4.1.8",
+    "animejs": "^4.0.2",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "connect-mongo": "^5.1.0",
+    "cordova-plugin-camera": "^8.0.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
     "mongoose": "^8.15.0",
     "socket.io": "^4.8.1",
-    "tailwindcss": "^4.1.7",
+    "tailwindcss": "^4.1.8",
     "uuid": "^11.1.0"
   }
 }

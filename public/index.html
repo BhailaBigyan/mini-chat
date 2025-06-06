@@ -5,114 +5,423 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mini Chat</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+   
+
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .glass-effect {
+      backdrop-filter: blur(20px);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    
+    .modal-backdrop {
+      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.4);
+    }
+    
+    .modal-enter {
+      animation: modalEnter 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    @keyframes modalEnter {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    
+    .floating-element {
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+    
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+      50% { box-shadow: 0 0 40px rgba(99, 102, 241, 0.8); }
+    }
+    
+    .feature-icon {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-50 text-gray-800 overflow-x-hidden">
+
+  <!-- Animated Background Elements -->
+  <div class="fixed inset-0 z-0 pointer-events-none">
+    <div class="absolute top-20 left-10 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating-element"></div>
+    <div class="absolute top-40 right-10 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating-element" style="animation-delay: -2s;"></div>
+    <div class="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 floating-element" style="animation-delay: -4s;"></div>
+  </div>
 
   <!-- Hero Section -->
-  <div class="min-h-screen flex flex-col items-center justify-center px-4 text-center bg-gradient-to-br from-blue-500 to-indigo-600 text-white">
-    <h1 class="text-5xl font-extrabold mb-4">Welcome to Mini Chat 💬</h1>
-    <p class="text-lg max-w-xl mb-8">
-      Chat with strangers in Global chat room or create your own private space for friends.
-      Chat securely with end-to-end encryption and enjoy a clean, minimal interface designed for speed and simplicity.
-    </p>
-    <div class="space-x-4">
-      <button onclick="toggleLoginModal()" class="px-6 py-3 bg-white text-blue-600 font-semibold rounded-xl hover:bg-blue-100 transition">
-        Login
-      </button>
-      <button onclick="toggleRegisterModal()" class="px-6 py-3 bg-white text-blue-600 font-semibold rounded-xl hover:bg-blue-100 transition">
-        Register
-      </button>
+  <div class="relative min-h-screen flex flex-col items-center justify-center px-4 text-center gradient-bg text-white overflow-hidden">
+    <div class="absolute inset-0 bg-black bg-opacity-10"></div>
+    
+    <!-- Floating Chat Bubbles -->
+    <div class="absolute top-20 left-10 glass-effect rounded-2xl p-4 floating-element hidden md:block">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-green-400 rounded-full"></div>
+        <div>
+          <div class="w-20 h-3 bg-white bg-opacity-50 rounded mb-1"></div>
+          <div class="w-16 h-2 bg-white bg-opacity-30 rounded"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="absolute top-32 right-16 glass-effect rounded-2xl p-4 floating-element hidden md:block" style="animation-delay: -3s;">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 bg-blue-400 rounded-full"></div>
+        <div>
+          <div class="w-24 h-3 bg-white bg-opacity-50 rounded mb-1"></div>
+          <div class="w-12 h-2 bg-white bg-opacity-30 rounded"></div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="relative z-10 max-w-4xl mx-auto">
+      <div class="mb-8">
+        <div class="inline-flex items-center justify-center w-20 h-20 bg-white bg-opacity-20 rounded-full mb-6 pulse-glow">
+          <span class="text-4xl">💬</span>
+        </div>
+        <h1 class="text-6xl md:text-7xl font-extrabold mb-6 leading-tight">
+          Welcome to
+          <span class="bg-gradient-to-r from-yellow-200 to-orange-200 bg-clip-text text-transparent">
+            Mini Chat
+          </span>
+        </h1>
+        <p class="text-xl md:text-2xl max-w-3xl mx-auto mb-12 leading-relaxed text-gray-100">
+          Connect instantly with people worldwide in our global chat room, or create secure private spaces for your friends. 
+          <span class="font-semibold">Simple. Secure. Social.</span>
+        </p>
+      </div>
+      
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button onclick="toggleLoginModal()" class="group px-8 py-4 bg-white text-purple-600 font-semibold rounded-2xl hover:bg-gray-50 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
+          <span class="flex items-center justify-center gap-2">
+            <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+            </svg>
+            Login
+          </span>
+        </button>
+        <button onclick="toggleRegisterModal()" class="group px-8 py-4 bg-transparent border-2 border-white text-white font-semibold rounded-2xl hover:bg-white hover:text-purple-600 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl">
+          <span class="flex items-center justify-center gap-2">
+            <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+            </svg>
+            Get Started
+          </span>
+        </button>
+      </div>
+      
+      <div class="mt-16 flex justify-center">
+        <div class="animate-bounce">
+          <svg class="w-6 h-6 text-white opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+          </svg>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Login Modal -->
-  <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm relative">
-      <button onclick="toggleLoginModal()" class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-xl">&times;</button>
-      <h2 class="text-xl font-bold mb-4 text-center text-blue-600">Login to Mini Chat</h2>
-      <form action="/login" method="POST" class="space-y-4">
-        <div>
-          <label for="login-username" class="block text-sm font-medium text-gray-700">Username</label>
-          <input type="text" id="login-username" name="username" required class="w-full mt-1 p-2 border border-gray-300 rounded" />
+  <div id="loginModal" class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 hidden p-4">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md relative modal-enter">
+      <button onclick="toggleLoginModal()" class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      
+      <div class="p-8">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-800 mb-2">Welcome Back!</h2>
+          <p class="text-gray-600">Sign in to continue chatting</p>
         </div>
-        <div>
-          <label for="login-password" class="block text-sm font-medium text-gray-700">Password</label>
-          <input type="password" id="login-password" name="password" required class="w-full mt-1 p-2 border border-gray-300 rounded" />
+        
+        <form action="/login" method="POST" class="space-y-6">
+          <div class="space-y-4">
+            <div>
+              <label for="login-username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+              <input type="text" id="login-username" name="username" required 
+                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white" 
+                     placeholder="Enter your username" />
+            </div>
+            <div>
+              <label for="login-password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <input type="password" id="login-password" name="password" required 
+                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white" 
+                     placeholder="Enter your password" />
+            </div>
+          </div>
+          
+          <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white py-3 rounded-xl font-semibold hover:from-purple-600 hover:to-indigo-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+            Sign In
+          </button>
+        </form>
+        
+        <div class="mt-6 text-center">
+          <p class="text-gray-600">
+            Don't have an account?
+            <button onclick="toggleLoginModal(); toggleRegisterModal();" class="text-purple-600 hover:text-purple-700 font-semibold hover:underline ml-1">
+              Create one here
+            </button>
+          </p>
         </div>
-        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Login</button>
-      </form>
-      <p class="text-sm text-center mt-4">
-        Don't have an account?
-        <button onclick="toggleLoginModal(); toggleRegisterModal();" class="text-blue-600 hover:underline">Register here</button>
-      </p>
+      </div>
     </div>
   </div>
 
   <!-- Register Modal -->
-  <div id="registerModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm relative">
-      <button onclick="toggleRegisterModal()" class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-xl">&times;</button>
-      <h2 class="text-xl font-bold mb-4 text-center text-blue-600">Register for Mini Chat</h2>
-      <form action="/register" method="POST" class="space-y-4">
-        <div>
-          <label for="register-fullname" class="block text-sm font-medium text-gray-700">Full Name</label>
-          <input type="text" id="register-name" name="name" required class="w-full mt-1 p-2 border border-gray-300 rounded" />
+  <div id="registerModal" class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 hidden p-4">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md relative modal-enter">
+      <button onclick="toggleRegisterModal()" class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all duration-200">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+      
+      <div class="p-8">
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-blue-600 rounded-full mb-4">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+            </svg>
+          </div>
+          <h2 class="text-2xl font-bold text-gray-800 mb-2">Join Mini Chat</h2>
+          <p class="text-gray-600">Create your account to get started</p>
         </div>
-        <div>
-          <label for="register-username" class="block text-sm font-medium text-gray-700">Username</label>
-          <input type="text" id="register-username" name="username" required class="w-full mt-1 p-2 border border-gray-300 rounded" />
-        </div>
-        <div>
-          <label for="register-password" class="block text-sm font-medium text-gray-700">Password</label>
-          <input type="password" id="register-password" name="password" required class="w-full mt-1 p-2 border border-gray-300 rounded" />
-        </div>
-        <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Register</button>
-      </form>
+        
+        <form action="/register" method="POST" class="space-y-6">
+          <div class="space-y-4">
+            <div>
+              <label for="register-name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+              <input type="text" id="register-name" name="name" required 
+                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white" 
+                     placeholder="Enter your full name" />
+            </div>
+            <div>
+              <label for="register-username" class="block text-sm font-medium text-gray-700 mb-2">Username</label>
+              <input type="text" id="register-username" name="username" required 
+                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white" 
+                     placeholder="Choose a username" />
+            </div>
+            <div>
+              <label for="register-password" class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <input type="password" id="register-password" name="password" required 
+                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white" 
+                     placeholder="Create a secure password" />
+            </div>
+          </div>
 
-      <p class="text-xs text-gray-600 mt-4 text-center">
-        By registering, you agree to our
-        <a href="/terms.html" class="text-blue-600 hover:underline">Terms of Service</a>.
-      </p>
+          <button type="submit" class="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white py-3 rounded-xl font-semibold hover:from-green-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+            Create Account
+          </button>
+        </form>
 
-      <p class="text-sm text-center mt-3">
-        Already have an account?
-        <button onclick="toggleRegisterModal(); toggleLoginModal();" class="text-blue-600 hover:underline">Login here</button>
-      </p>
+        <div class="mt-4 p-4 bg-gray-50 rounded-xl">
+          <p class="text-xs text-gray-600 text-center">
+            By creating an account, you agree to our
+            <a href="/terms.html" class="text-purple-600 hover:text-purple-700 hover:underline">Terms of Service</a>
+          </p>
+        </div>
+
+        <div class="mt-6 text-center">
+          <p class="text-gray-600">
+            Already have an account?
+            <button onclick="toggleRegisterModal(); toggleLoginModal();" class="text-green-600 hover:text-green-700 font-semibold hover:underline ml-1">
+              Sign in here
+            </button>
+          </p>
+        </div>
+      </div>
     </div>
   </div>
+
   <!-- Features Section -->
-  <section class="py-16 px-6 bg-white text-center">
-    <h2 class="text-3xl font-bold mb-8">Why Mini Chat?</h2>
-    <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-      <div class="bg-gray-50 p-6 rounded-lg shadow hover:shadow-md transition">
-        <h3 class="text-xl font-semibold mb-2">🌍 Gloabl Chat</h3>
-        <p>Jump into the global chat and meet new people instantly.</p>
+  <section class="relative py-24 px-6 bg-white">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+          Why Choose <span class="text-purple-600">Mini Chat?</span>
+        </h2>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+          Experience the perfect blend of simplicity, security, and social connection in one powerful platform.
+        </p>
       </div>
-      <div class="bg-gray-50 p-6 rounded-lg shadow hover:shadow-md transition">
-        <h3 class="text-xl font-semibold mb-2">🔒 Private Chats</h3>
-        <p>Create a private chat with a code and invite friends securely.</p>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl card-hover border border-gray-100">
+          <div class="mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mb-4">
+              <span class="text-3xl">🌍</span>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">Global Chat</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Connect with people from around the world instantly. Join conversations, make friends, and discover new perspectives in our vibrant global community.
+            </p>
+          </div>
+        </div>
+        
+        <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl card-hover border border-gray-100">
+          <div class="mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-teal-600 rounded-2xl mb-4">
+              <span class="text-3xl">🔒</span>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">Private Rooms</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Create secure private chat rooms with unique codes. Invite your friends and family for intimate conversations with end-to-end encryption.
+            </p>
+          </div>
+        </div>
+        
+        <div class="group bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl card-hover border border-gray-100">
+          <div class="mb-6">
+            <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl mb-4">
+              <span class="text-3xl">⚡</span>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-3">Lightning Fast</h3>
+            <p class="text-gray-600 leading-relaxed">
+              Built for speed and simplicity. Clean, intuitive interface that gets out of your way so you can focus on what matters - great conversations.
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="bg-gray-50 p-6 rounded-lg shadow hover:shadow-md transition">
-        <h3 class="text-xl font-semibold mb-2">💡 Easy to Use</h3>
-        <p>Minimal and clean interface built for speed and simplicity.</p>
+      
+      <!-- Stats Section -->
+      <div class="mt-20 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-3xl p-8 text-white">
+        <div class="grid md:grid-cols-4 gap-8 text-center">
+          <div>
+            <div class="text-4xl font-bold mb-2">10</div>
+            <div class="text-purple-200">Active Users</div>
+          </div>
+          <div>
+            <div class="text-4xl font-bold mb-2">1K+</div>
+            <div class="text-purple-200">Messages Sent</div>
+          </div>
+          <div>
+            <div class="text-4xl font-bold mb-2">24/7</div>
+            <div class="text-purple-200">Online Support</div>
+          </div>
+          <div>
+            <div class="text-4xl font-bold mb-2">100%</div>
+            <div class="text-purple-200">Secure</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="text-center py-6 bg-gray-100 text-sm text-gray-500">
-    © 2025 Mini Chat. Connect Freely.<br>Developed by Bigyan Bhaila.
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between">
+        <div class="mb-4 md:mb-0">
+          <div class="flex items-center gap-3 mb-2">
+            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center">
+              <span class="text-xl">💬</span>
+            </div>
+            <span class="text-2xl font-bold">Mini Chat</span>
+          </div>
+          <p class="text-gray-400">Connect Freely, Chat Securely</p>
+        </div>
+        
+        <div class="text-center md:text-right">
+          <p class="text-gray-400 mb-1">© 2025 Mini Chat. All rights reserved.</p>
+          <p class="text-sm text-gray-500">Developed and Powered by Bigyan Bhaila</p>
+        </div>
+      </div>
+    </div>
   </footer>
 
   <!-- JavaScript -->
   <script>
     function toggleLoginModal() {
-      document.getElementById('loginModal').classList.toggle('hidden');
+      const modal = document.getElementById('loginModal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = 'auto';
+      }
     }
+    
     function toggleRegisterModal() {
-      document.getElementById('registerModal').classList.toggle('hidden');
+      const modal = document.getElementById('registerModal');
+      modal.classList.toggle('hidden');
+      if (!modal.classList.contains('hidden')) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = 'auto';
+      }
     }
+    
+    // Close modals when clicking outside
+    document.addEventListener('click', function(e) {
+      const loginModal = document.getElementById('loginModal');
+      const registerModal = document.getElementById('registerModal');
+      
+      if (e.target === loginModal) {
+        toggleLoginModal();
+      }
+      if (e.target === registerModal) {
+        toggleRegisterModal();
+      }
+    });
+    
+    // Close modals with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const loginModal = document.getElementById('loginModal');
+        const registerModal = document.getElementById('registerModal');
+        
+        if (!loginModal.classList.contains('hidden')) {
+          toggleLoginModal();
+        }
+        if (!registerModal.classList.contains('hidden')) {
+          toggleRegisterModal();
+        }
+      }
+    });
   </script>
-
 </body>
 </html>
